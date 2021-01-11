@@ -7,10 +7,11 @@ namespace ParagonCodingExercise.Airports
 {
     public class AirportCollection
     {
+        public List<Airport> AirportList {get; set;}
         
         public AirportCollection(List<Airport> airports)
         {
-            throw new NotImplementedException();
+            AirportList = airports;
         }
 
         public static AirportCollection LoadFromFile(string filePath)
@@ -29,7 +30,20 @@ namespace ParagonCodingExercise.Airports
 
         public Airport GetClosestAirport(GeoCoordinate coordinate)
         {
-            throw new NotImplementedException();
+            // Assign it to first airport to avoid linting errors
+            Airport closestAirport = AirportList[0];
+            double minDist = Double.MaxValue;
+            foreach (var airport in AirportList){
+                string latlong = airport.Latitude.ToString() + "," + airport.Longitude.ToString();
+                GeoCoordinate airportLocation = GeoCoordinate.FromLatitudeAndLongitudeString(latlong);
+                double tempDist = coordinate.GetDistanceTo(airportLocation);
+                if (tempDist < minDist){
+                    minDist = tempDist;
+                    closestAirport = airport;
+                }
+            }
+
+            return closestAirport;
         }
     }
 }

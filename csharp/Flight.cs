@@ -13,5 +13,10 @@ namespace ParagonCodingExercise
         public DateTime ArrivalTime { get; set; }
 
         public string ArrivalAirport { get; set; }
+
+        public override string ToString()
+        {
+            return "{" + $"\"AircraftIdentifier\":{AircraftIdentifier},\"DepartureTime\":{DepartureTime},\"DepartureAirport\":{DepartureAirport},\"ArrivalTime\":{ArrivalTime},\"ArrivalAirport\":{ArrivalAirport}" + "}";
+        }
     }
 }
