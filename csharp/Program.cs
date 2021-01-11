@@ -44,147 +44,62 @@ namespace ParagonCodingExercise
 
             System.IO.StreamWriter outFile = new System.IO.StreamWriter(OutputFilePath);
 
-            // foreach (var key in airplanes.Keys){
-            //     System.Console.WriteLine(key);
-            //     DateTime prevTime = DateTime.Parse("1/01/2020 12:00:00 AM");
-            //     GeoCoordinate prevAirportLocation = null;
-            //     Airport prevAirport = null;
-            //     Flight flight = new Flight();
-            //     flight.AircraftIdentifier = key;
-                
+            foreach (var key in airplanes.Keys){
+                System.Console.WriteLine(key);
+                DateTime prevTime = DateTime.Parse("1/01/2020 12:00:00 AM");
+                GeoCoordinate prevAirportLocation = null;
+                Airport prevAirport = null;
+                Flight flight = new Flight();
+                flight.AircraftIdentifier = key;
 
-            //     foreach (var adsbEventEntry in airplanes[key]){
-            //         // create a geolocation based on airplane adsb event coords
-            //         string latLong = adsbEventEntry.Latitude.ToString() + "," + adsbEventEntry.Longitude.ToString();
-            //         GeoCoordinate airplaneLocation = GeoCoordinate.FromLatitudeAndLongitudeString(latLong);
-            //         // get closest airport based on current airplane location
-            //         Airport tempAirport = airports.GetClosestAirport(airplaneLocation);
-            //         // create airport geolocation
-            //         string airportLatLong = tempAirport.Latitude.ToString() + "," + tempAirport.Longitude.ToString();
-            //         GeoCoordinate airportLocation = GeoCoordinate.FromLatitudeAndLongitudeString(airportLatLong);
+                foreach (var adsbEventEntry in airplanes[key]){
+                    // create a geolocation based on airplane adsb event coords
+                    string latLong = adsbEventEntry.Latitude.ToString() + "," + adsbEventEntry.Longitude.ToString();
+                    GeoCoordinate airplaneLocation = GeoCoordinate.FromLatitudeAndLongitudeString(latLong);
+                    // get closest airport based on current airplane location
+                    Airport tempAirport = airports.GetClosestAirport(airplaneLocation);
+                    // create airport geolocation
+                    string airportLatLong = tempAirport.Latitude.ToString() + "," + tempAirport.Longitude.ToString();
+                    GeoCoordinate airportLocation = GeoCoordinate.FromLatitudeAndLongitudeString(airportLatLong);
 
-            //         // In order for an event to be a landing/takeoff:
-            //         // 1. geolocation within 5 miles of an airport (Flight safety, no unregistered aircraft within 5 miles of an airport)
-            //         // 2. altitude diff within 500 feet (safety altitude)
-            //         // 3. take off and landing speed < 200 mph
+                    // In order for an event to be a landing/takeoff:
+                    // 1. geolocation within 5 miles of an airport (Flight safety, no unregistered aircraft within 5 miles of an airport)
+                    // 2. altitude diff within 500 feet (safety altitude)
+                    // 3. take off and landing speed < 200 mph
 
-            //         // In order for an airport to have a takeoff for this airplane:
-            //         // 1. The timestamp reads must have a difference > 30 mins
+                    // In order for an airport to have a takeoff for this airplane:
+                    // 1. The timestamp reads must have a difference > 30 mins
 
-            //         // Airplane heading and speed is not always present in adsbevent data, which means we can't rely on it to determine landing vs takeoff
-            //         double tempDist = airplaneLocation.GetDistanceTo(airportLocation);
-            //         if (tempDist < 5){
-            //             if (adsbEventEntry.Altitude != null && (adsbEventEntry.Altitude - tempAirport.Elevation <= 500) && adsbEventEntry.Speed != null && adsbEventEntry.Speed <= 200){
-            //                 //doing some reasearch, it looks like it takes the crew around 30-60 mins to get the plane checked again for next flight
-            //                 if (adsbEventEntry.Timestamp - prevTime > TimeSpan.Parse("00:30:00")){ 
-            //                     // logic for arrivals and departures
-            //                     if (prevAirportLocation != null && prevAirportLocation != airportLocation){
-            //                         //only departure is added w/ previous timestamp
-            //                         flight.DepartureTime = prevTime;
-            //                         flight.DepartureAirport = prevAirport.Identifier;
-            //                     }
-            //                     else if (prevAirportLocation == airportLocation) {
-            //                         //arrival is added w/ previous timestamp
-            //                         flight.ArrivalTime = prevTime;
-            //                         flight.ArrivalAirport = prevAirport.Identifier;
-            //                     }
-            //                 }
-            //                 prevAirportLocation = airportLocation;
-            //                 prevTime = adsbEventEntry.Timestamp;
-            //                 prevAirport = tempAirport;
-            //             }
-            //         }
-            //         if (flight.DepartureAirport != null && flight.ArrivalAirport != null){
-            //             outFile.WriteLine(flight.ToString());
-            //             flight = new Flight();
-            //             flight.AircraftIdentifier = key;
-            //         }
-            //     }
-
-            //     if (flight.DepartureAirport == null){
-            //         flight.DepartureTime = prevTime;
-            //         flight.DepartureAirport = prevAirport.Identifier;
-            //     }
-            //     else  {
-            //         flight.ArrivalTime = prevTime;
-            //         flight.ArrivalAirport = prevAirport.Identifier;
-            //     }
-
-            //     outFile.WriteLine(flight.ToString());
-            // }
-            
-            DateTime prevTime = DateTime.Parse("1/01/2020 12:00:00 AM");
-            GeoCoordinate prevAirportLocation = null;
-            Airport prevAirport = null;
-            Flight flight = new Flight();
-            flight.AircraftIdentifier = "AA4CF5";
-            //AA4CF5
-            
-
-            foreach (var adsbEventEntry in airplanes["AA4CF5"]){
-                // create a geolocation based on airplane adsb event coords
-                string latLong = adsbEventEntry.Latitude.ToString() + "," + adsbEventEntry.Longitude.ToString();
-                GeoCoordinate airplaneLocation = GeoCoordinate.FromLatitudeAndLongitudeString(latLong);
-                // get closest airport based on current airplane location
-                Airport tempAirport = airports.GetClosestAirport(airplaneLocation, adsbEventEntry.Heading);
-                
-                // create airport geolocation
-                string airportLatLong = tempAirport.Latitude.ToString() + "," + tempAirport.Longitude.ToString();
-                GeoCoordinate airportLocation = GeoCoordinate.FromLatitudeAndLongitudeString(airportLatLong);
-
-                // In order for an to be a landing/takeoff:
-                // 1. geolocation within 5 miles of an airport (Flight safety, no unregistered aircraft within 5 miles of an airport)
-                // 2. altitude diff within 500 feet (safety altitude)
-
-                // In order for an airport to have a takeoff for this airplane:
-                // 1. The timestamp reads must have a difference > 5 mins
-
-                // Airplane heading and speed is not always present in adsbevent data, which means we can't rely on it to determine landing vs takeoff
-                double tempDist = airplaneLocation.GetDistanceTo(airportLocation);
-                if (tempDist < 5){
-                    if (adsbEventEntry.Altitude != null && (adsbEventEntry.Altitude - tempAirport.Elevation <= 500) && adsbEventEntry.Speed != null && adsbEventEntry.Speed <= 200){
-                        //doing some reasearch, it looks like it takes the crew around 30-60 mins to get the plane checked again for next flight
-                        if (adsbEventEntry.Timestamp - prevTime > TimeSpan.Parse("00:30:00")){ 
-                            // logic for arrivals and departures
-                            if (prevAirportLocation != null && prevAirportLocation != airportLocation){
-                                //only departure is added w/ previous timestamp
-                                System.Console.WriteLine("DEPARTURE");
-                                flight.DepartureTime = prevTime;
-                                flight.DepartureAirport = prevAirport.Identifier;
+                    // Airplane heading and speed is not always present in adsbevent data, which means we can't rely on it to determine landing vs takeoff
+                    double tempDist = airplaneLocation.GetDistanceTo(airportLocation);
+                    if (tempDist < 5){
+                        if (adsbEventEntry.Altitude != null && (adsbEventEntry.Altitude - tempAirport.Elevation <= 500) && adsbEventEntry.Speed != null && adsbEventEntry.Speed <= 200){
+                            //doing some reasearch, it looks like it takes the crew around 30-60 mins to get the plane checked again for next flight
+                            if (adsbEventEntry.Timestamp - prevTime > TimeSpan.Parse("00:30:00")){ 
+                                // logic for arrivals and departures
+                                if (prevAirportLocation != null && prevAirportLocation != airportLocation){
+                                    //only departure is added w/ previous timestamp
+                                    flight.DepartureTime = prevTime;
+                                    flight.DepartureAirport = prevAirport.Identifier;
+                                }
+                                else if (prevAirportLocation == airportLocation) {
+                                    //arrival is added w/ previous timestamp
+                                    flight.ArrivalTime = prevTime;
+                                    flight.ArrivalAirport = prevAirport.Identifier;
+                                }
                             }
-                            else if (prevAirportLocation == airportLocation) {
-                                //arrival is added w/ previous timestamp
-                                System.Console.WriteLine("ARRIVAL");
-                                flight.ArrivalTime = prevTime;
-                                flight.ArrivalAirport = prevAirport.Identifier;
-                            }
+                            prevAirportLocation = airportLocation;
+                            prevTime = adsbEventEntry.Timestamp;
+                            prevAirport = tempAirport;
                         }
-                        prevAirportLocation = airportLocation;
-                        prevTime = adsbEventEntry.Timestamp;
-                        prevAirport = tempAirport;
                     }
-                    System.Console.WriteLine(adsbEventEntry.Timestamp + ":" + adsbEventEntry.Latitude + ":" + adsbEventEntry.Longitude + ":" + adsbEventEntry.Heading + ":" + adsbEventEntry.Speed + "||" + tempAirport.Latitude + ":" + tempAirport.Longitude);
-                }
-                if (flight.DepartureAirport != null && flight.ArrivalAirport != null){
-                    System.Console.WriteLine(flight.ToString());
-                    outFile.WriteLine(flight.ToString());
-                    flight = new Flight();
-                    flight.AircraftIdentifier = "ABA891";
+                    if (flight.DepartureAirport != null && flight.ArrivalAirport != null){
+                        outFile.WriteLine(flight.ToString());
+                        flight = new Flight();
+                        flight.AircraftIdentifier = key;
+                    }
                 }
             }
-            
-            if (flight.DepartureAirport == null){
-                System.Console.WriteLine("DEPARTURE");
-                flight.DepartureTime = prevTime;
-                flight.DepartureAirport = prevAirport.Identifier;
-            }
-            else  {
-                System.Console.WriteLine("ARRIVAL");
-                flight.ArrivalTime = prevTime;
-                flight.ArrivalAirport = prevAirport.Identifier;
-            }
-
-            outFile.WriteLine(flight.ToString());
             
             outFile.Close();
 

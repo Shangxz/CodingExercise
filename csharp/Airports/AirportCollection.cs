@@ -28,7 +28,7 @@ namespace ParagonCodingExercise.Airports
             return new AirportCollection(airports);
         }
 
-        public Airport GetClosestAirport(GeoCoordinate coordinate, double? heading)
+        public Airport GetClosestAirport(GeoCoordinate coordinate)
         {
             // Assign it to first airport to avoid linting errors
             Airport closestAirport = AirportList[0];
@@ -37,21 +37,9 @@ namespace ParagonCodingExercise.Airports
                 string latlong = airport.Latitude.ToString() + "," + airport.Longitude.ToString();
                 GeoCoordinate airportLocation = GeoCoordinate.FromLatitudeAndLongitudeString(latlong);
                 double tempDist = coordinate.GetDistanceTo(airportLocation);
-                if (heading.HasValue){
-                    double directToAirport = coordinate.GetBearingTo(airportLocation);
-                    double tempHeading = heading.Value;
-                    if (Math.Abs(directToAirport - tempHeading) <= 180.0){ //similar direction
-                        if (tempDist < minDist){
-                            minDist = tempDist;
-                            closestAirport = airport;
-                        }
-                    }
-                }
-                else {
-                    if (tempDist < minDist){
-                        minDist = tempDist;
-                        closestAirport = airport;
-                    }
+                if (tempDist < minDist){
+                    minDist = tempDist;
+                    closestAirport = airport;
                 }
             }
 
