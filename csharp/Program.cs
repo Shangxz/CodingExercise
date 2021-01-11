@@ -45,7 +45,9 @@ namespace ParagonCodingExercise
             System.IO.StreamWriter outFile = new System.IO.StreamWriter(OutputFilePath);
 
             foreach (var key in airplanes.Keys){
-                System.Console.WriteLine(key);
+                // debug output
+                // System.Console.WriteLine(key);
+                // setting defaults
                 DateTime prevTime = DateTime.Parse("1/01/2020 12:00:00 AM");
                 GeoCoordinate prevAirportLocation = null;
                 Airport prevAirport = null;
@@ -74,7 +76,7 @@ namespace ParagonCodingExercise
                     double tempDist = airplaneLocation.GetDistanceTo(airportLocation);
                     if (tempDist < 5){
                         if (adsbEventEntry.Altitude != null && (adsbEventEntry.Altitude - tempAirport.Elevation <= 500) && adsbEventEntry.Speed != null && adsbEventEntry.Speed <= 200){
-                            //doing some reasearch, it looks like it takes the crew around 30-60 mins to get the plane checked again for next flight
+                            //did some reasearch, it looks like it takes the crew around 30-60 mins to get the plane checked again for next flight
                             if (adsbEventEntry.Timestamp - prevTime > TimeSpan.Parse("00:30:00")){ 
                                 // logic for arrivals and departures
                                 if (prevAirportLocation != null && prevAirportLocation != airportLocation){
@@ -93,6 +95,8 @@ namespace ParagonCodingExercise
                             prevAirport = tempAirport;
                         }
                     }
+
+                    //record flights if arrival time is populated
                     if (flight.ArrivalAirport != null){
                         outFile.WriteLine(flight.ToString());
                         flight = new Flight();
