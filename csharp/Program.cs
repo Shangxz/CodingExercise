@@ -93,7 +93,7 @@ namespace ParagonCodingExercise
                             prevAirport = tempAirport;
                         }
                     }
-                    if (flight.DepartureAirport != null && flight.ArrivalAirport != null){
+                    if (flight.ArrivalAirport != null){
                         outFile.WriteLine(flight.ToString());
                         flight = new Flight();
                         flight.AircraftIdentifier = key;
